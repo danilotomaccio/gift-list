@@ -17,8 +17,7 @@ export const GiftComponent: React.FC<Props> = ({ name, link, imageUrl, descripti
             <MdElevationComponent></MdElevationComponent>
             <div className="text">
                 <div className='display-small'>{name}</div>
-                <p>{description}</p>
-                <div className="body-small">{price}</div>
+                <div className="body-small price">{price}</div>
             </div>
             <div className="image">
             <img src={imageUrl} alt={name} />
