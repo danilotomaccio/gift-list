@@ -4,7 +4,6 @@ import { GiftComponent } from './GiftComponent';
 import "./ListComponent.css";
 import { MdCircularProgressComponent } from '../wrappers/circular-progress-wrapper';
 import { MdIconButtonComponent } from '../wrappers/icon-button-wrapper';
-import { MdIcon } from '@material/web/icon/icon';
 import { MdIconComponent } from '../wrappers/icon-wrapper';
 
 export const ListComponent: React.FC = () => {

@@ -11,7 +11,7 @@ interface Props {
     description?: string;
 }
 
-export const GiftComponent: React.FC<Props> = ({ name, link, imageUrl, description, price }) => {
+export const GiftComponent: React.FC<Props> = ({ name, link, imageUrl, price }) => {
     return (
         <a href={link} target="_blank" rel="noopener noreferrer" className='giftComponent'>
             <MdElevationComponent></MdElevationComponent>
