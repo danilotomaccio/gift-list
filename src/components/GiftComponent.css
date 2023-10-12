@@ -5,7 +5,7 @@
   border-radius: 16px;
   margin: 12px;
 
-  --md-elevation-level: 3;
+  --md-elevation-level: 2;
 
   display: flex;
   flex-direction: row;
@@ -15,6 +15,7 @@
 
 .text {
   flex: 1 1 auto;
+  margin: 18px;
 }
 .image {
   flex: 1 1 auto;
@@ -30,4 +31,35 @@
   position: absolute;
   bottom: -10%;
   right: -10%;
+}
+
+a.giftComponent {
+  text-decoration: none;
+  color: inherit;  
+}
+
+@media (max-width: 800px) {
+  .giftComponent {
+    position: relative;
+    height: 300px;
+    width: 90%;
+    border-radius: 16px;
+    margin: 12px;
+  
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+  }
+
+  .image {
+    align-self: flex-end;
+    border-radius: 0;
+    width: 80%;
+  }
+  
+  .image img {
+    width: 80%;
+    position: relative;
+  }
 }

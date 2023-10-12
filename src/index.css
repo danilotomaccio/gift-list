@@ -1,10 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
 @import url("css/theme.css");
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Montserrat";
+  --my-headline-font: "Montserrat";
+  --my-title-font: "Montserrat";
+  --my-plain-font: system-ui;
+  --md-icon-font: "Material Symbols Outlined";
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
 }

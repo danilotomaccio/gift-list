@@ -13,17 +13,16 @@ interface Props {
 
 export const GiftComponent: React.FC<Props> = ({ name, link, imageUrl, description, price }) => {
     return (
-        <div className='giftComponent'>
+        <a href={link} target="_blank" rel="noopener noreferrer" className='giftComponent'>
             <MdElevationComponent></MdElevationComponent>
             <div className="text">
-                <h2>{name}</h2>
+                <div className='display-small'>{name}</div>
                 <p>{description}</p>
-                <div className="price">{price}</div>
-                <a href={link} target="_blank" rel="noopener noreferrer">Vai al link</a>
+                <div className="body-small">{price}</div>
             </div>
             <div className="image">
             <img src={imageUrl} alt={name} />
             </div>
-        </div>
+        </a>
     );
 }
