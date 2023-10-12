@@ -4,7 +4,7 @@ import { ListComponent } from './components/ListComponent'
 function App() {
   return (
     <>
-      <div className="display-medium title">
+      <div className="display-large title">
         Gift List
       </div>
       <ListComponent></ListComponent>
