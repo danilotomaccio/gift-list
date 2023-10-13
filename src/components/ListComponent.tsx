@@ -47,7 +47,7 @@ export const ListComponent: React.FC = () => {
             <div className="filter">
                 Ordina per prezzo:
                 <MdIconButtonComponent onClick={toggleOrder}>
-                    {orderAsc ? <MdIconComponent>expand_less</MdIconComponent> : <MdIconComponent>expand_more</MdIconComponent>}
+                    {orderAsc ? <MdIconComponent>expand_more</MdIconComponent> : <MdIconComponent>expand_less</MdIconComponent>}
                 </MdIconButtonComponent>
             </div>
             {gifts?.map((gift, index) => (
