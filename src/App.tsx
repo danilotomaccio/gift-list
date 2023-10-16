@@ -1,17 +1,17 @@
-import './App.css'
-import { ListComponent } from './components/ListComponent'
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import './App.css';
+import { GiftListPage } from './pages/GiftListPage';
+import { FirstGamePage } from './pages/FirstGamePage';
 
 function App() {
   return (
-    <>
-      <div className="display-large title">
-        Gift List
-      </div>
-      <div className="body-small sub-title">
-        I prezzi vengono presi in automatico, potrebbero essere sbagliati e perciò sono solo indicativi
-      </div>
-      <ListComponent></ListComponent>
-    </>
+    <MemoryRouter>
+      <Routes>
+        <Route path="/" Component={FirstGamePage} />
+        <Route path="/secondGame" Component={SecondGamePage} />
+        <Route path="/gift-list" Component={GiftListPage} />
+      </Routes>
+    </MemoryRouter>
   )
 }
 

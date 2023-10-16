@@ -1,0 +1,10 @@
+.firstGame {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.firstGame .textGame {
+    margin: 18px;
+}
