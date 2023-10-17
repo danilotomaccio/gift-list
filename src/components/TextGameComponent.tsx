@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 
 export const TextGameComponent: React.FC<{ onWin: () => void }> = ({ onWin }) => {
     const text = "Apri quest'applicazione da smartphone. Se sei già su smartphone non ci resta che iniziare";
-    const targetWord = "iniziamo";
+    //const targetWord = "iniziamo";
+    const targetWord = "i";
     const initialColors = Array(text.length).fill("inherit");
 
     const [colors, setColors] = useState(initialColors);

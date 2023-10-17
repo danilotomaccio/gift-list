@@ -2,6 +2,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { GiftListPage } from './pages/GiftListPage';
 import { FirstGamePage } from './pages/FirstGamePage';
+import { SecondGamePage } from './pages/SecondGamePage';
 
 function App() {
   return (

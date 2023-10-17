@@ -1,49 +1,54 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { MorseAlphabetComponent } from './MorseAlphabetComponent';
+import "./VorseGameComponent.css";
+import { InputPinComponent } from './InputPinComponent';
+import { MdIconComponent } from '../wrappers/icon-wrapper';
+import { MdFilledTonalIconButtonComponent } from '../wrappers/icon-button-wrapper copy';
 
-export const TextGameComponent: React.FC<{ onWin: () => void }> = ({ onWin }) => {
-    const text = "Apri quest'applicazione da smartphone. Se sei già su smartphone non ci resta che iniziare";
-    const targetWord = "iniziamo";
-    const initialColors = Array(text.length).fill("inherit");
+export const VorseGameComponent: React.FC<{ onWin: () => void }> = ({ onWin }) => {
 
-    const [colors, setColors] = useState(initialColors);
-    const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
-    const [selectedLetters, setSelectedLetters] = useState<string[]>([]);
+    const pwd = "3852";
+    const morseCode: { [char: string]: string } = {
+        "0": "-----",
+        "1": ".----",
+        "2": "..---",
+        "3": "...--",
+        "4": "....-",
+        "5": ".....",
+        "6": "-....",
+        "7": "--...",
+        "8": "---..",
+        "9": "----.",
+        /*  "a": ".-",
+         "b": "-...",
+         "c": "-.-.",
+         "d": "-..",
+         "e": ".",
+         "f": "..-." */
+    };
 
-    const handleLetterClick = (index: number) => {
-        const letter = text.toLocaleLowerCase()[index];
-        if (!selectedIndexes.includes(index)) {
-            setSelectedIndexes(prev => [...prev, index]);
-            setSelectedLetters(prev => [...prev, letter]);
-        }
-
-        if (targetWord[selectedLetters.length] === letter) {
-            const newColors = [...colors];
-            newColors[index] = "var(--md-sys-color-inverse-primary)";
-            setColors(newColors);
-
-            if (targetWord.length === selectedLetters.length + 1) {
-                onWin();
+    const vibrateMorse = () => {
+        const pattern: number[] = [];
+        for (let i = 0; i < pwd.length; i++) {
+            const char = pwd[i];
+            const charMorseCode = morseCode[char];
+            for (let j = 0; j < charMorseCode.length; j++) {
+                const cm = charMorseCode[j];
+                pattern.push(cm === '.' ? 200 : 300);
+                pattern.push((j === charMorseCode.length - 1) ? 500 : 200);
             }
-        } else {
-            setColors(initialColors);
-            setSelectedLetters([]);
-            setSelectedIndexes([]);
         }
-
-
+        console.log(pattern);
+        navigator.vibrate(pattern.flat());
     };
 
     return (
-        <span className='display-medium textGame'>
-            {text.split('').map((letter, index) => (
-                <span
-                    key={index}
-                    style={{ color: colors[index], cursor: 'pointer' }}
-                    onClick={() => handleLetterClick(index)}
-                >
-                    {letter}
-                </span>
-            ))}
-        </span>
+        <div className='vorseGame'>
+            <MorseAlphabetComponent/>
+            <InputPinComponent pin={pwd} onWin={onWin} />
+            <MdFilledTonalIconButtonComponent onClick={vibrateMorse}>
+                <MdIconComponent>vibration</MdIconComponent>
+            </MdFilledTonalIconButtonComponent>
+        </div>
     );
 }
