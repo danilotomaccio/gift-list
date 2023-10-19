@@ -1,5 +1,5 @@
 export function hexToRgbA(hex: string, alpha = 1) {
-    let r = 0, g = 0, b = 0;
+    let r = '0', g = '0', b = '0';
 
     if (hex.length == 4) {
         r = "0x" + hex[1] + hex[1];
