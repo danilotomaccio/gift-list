@@ -3,7 +3,7 @@ import { MorseAlphabetComponent } from './MorseAlphabetComponent';
 import "./VorseGameComponent.css";
 import { InputPinComponent } from './InputPinComponent';
 import { MdIconComponent } from '../wrappers/icon-wrapper';
-import { MdFilledTonalIconButtonComponent } from '../wrappers/icon-button-wrapper copy';
+import { MdFilledTonalIconButtonComponent } from '../wrappers/icon-button-wrapper';
 
 export const VorseGameComponent: React.FC<{ onWin: () => void }> = ({ onWin }) => {
 

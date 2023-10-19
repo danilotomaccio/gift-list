@@ -2,19 +2,16 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import { hexFromVar } from '../utils/style';
 import gsap from 'gsap';
 
-export const TrailComponent: React.FC<{ points: [number, number][] }> = ({ points }) => {
+export const TrailComponent: React.FC<{ points: [number, number][], onWin: () => void }> = ({ points, onWin }) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
     const currentPointIndex = useRef<number>(0);
     const pointsToDraw = useRef<[number, number][]>([]);
     const absPointsRef = useRef<[number, number][]>([]);
-
     const progress = useRef<number>(0);
-
     const touchX = useRef<number>(0);
     const touchY = useRef<number>(0);
     const frequency = useRef<number>(0);
-
     const lastTime = useRef<number>(0);
     const blinkState = useRef<boolean>(true);
     const win = useRef<boolean>(false);
@@ -59,10 +56,7 @@ export const TrailComponent: React.FC<{ points: [number, number][] }> = ({ point
                     const x = gsap.utils.interpolate(pointsArray[currentPointAnim - 1][0], pointsArray[currentPointAnim][0], relProgr);
                     const y = gsap.utils.interpolate(pointsArray[currentPointAnim - 1][1], pointsArray[currentPointAnim][1], relProgr);
                     ctx.lineTo(x, y);
-                } /* else {
-                    ctx.beginPath();
-                    ctx.arc(pointsArray[pointsArray.length - 1][0], pointsArray[pointsArray.length - 1][1], 20, 0, Math.PI * 2);
-                } */
+                }
                 ctx.stroke();
             }
 
@@ -78,8 +72,8 @@ export const TrailComponent: React.FC<{ points: [number, number][] }> = ({ point
     function winAnimation(pointsArray: [number, number][]) {
         gsap.to(progress, {
             current: 1,
-            duration: 10,  // Durata dell'animazione in secondi
-            onUpdate: () => drawLine(progress.current, pointsArray),  // Aggiorna il disegno in ogni frame
+            duration: pointsArray.length - 1,
+            onUpdate: () => drawLine(progress.current, pointsArray),
         });
     }
 
@@ -103,6 +97,7 @@ export const TrailComponent: React.FC<{ points: [number, number][] }> = ({ point
                 pointsToDraw.current.push(absPointsRef.current[currentPointIndex.current]);
                 win.current = true;
                 winAnimation([[canvas.width / 2, canvas.height / 2], ...absPointsFromRel(points, rect.width, rect.height)]);
+                onWin();
             }
         }
 
