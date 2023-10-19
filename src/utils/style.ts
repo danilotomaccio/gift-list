@@ -19,3 +19,9 @@ export function rgbaFromVar(varString: string, alpha = 1) {
     const rs = getComputedStyle(r);
     return (hexToRgbA(rs.getPropertyValue(varString), alpha));
 }
+
+export function hexFromVar(varString: string) {
+    const r = document.querySelector(':root')!;
+    const rs = getComputedStyle(r);
+    return (rs.getPropertyValue(varString));
+}

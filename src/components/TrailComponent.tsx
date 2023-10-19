@@ -1,178 +1,177 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { rgbaFromVar } from '../utils/style';
+import React, { useRef, useEffect, useCallback } from 'react';
+import { hexFromVar } from '../utils/style';
+import gsap from 'gsap';
 
 export const TrailComponent: React.FC<{ points: [number, number][] }> = ({ points }) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    let prevPos = useRef({ x: 0, y: 0 });
-    let currentPos = useRef({ x: 0, y: 0 });
-    let lastFlash = useRef(0);
-    let flashFreq = useRef(0);
-    let flashOn = useRef(false);
-    const drawing = useRef(false);
-    const bgColor = rgbaFromVar('--md-sys-color-background', .1);
+    const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+    const currentPointIndex = useRef<number>(0);
+    const pointsToDraw = useRef<[number, number][]>([]);
+    const absPointsRef = useRef<[number, number][]>([]);
 
-    const [currentPointIndex, setCurrentPointIndex] = useState(0);
+    const progress = useRef<number>(0);
 
-    const calculateDistance = (pos1: { x: number, y: number }, pos2: [number, number]) => {
-        return Math.hypot(pos2[0] - pos1.x, pos2[1] - pos1.y);
-    };
+    const touchX = useRef<number>(0);
+    const touchY = useRef<number>(0);
+    const frequency = useRef<number>(0);
 
-    const fadeTrail = useCallback((ctx: CanvasRenderingContext2D) => {
-        if (!ctx) return;
+    const lastTime = useRef<number>(0);
+    const blinkState = useRef<boolean>(true);
+    const win = useRef<boolean>(false);
 
-        ctx.fillStyle = bgColor;
-        ctx.fillRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
-    }, [bgColor]);
+    const errColor = hexFromVar('--md-sys-color-error');
+    const secondaryColor = hexFromVar('--md-sys-color-secondary');
 
+    function shuffleArray<T>(array: T[]): T[] {
+        const shuffledArray = array.slice();
+        for (let i = shuffledArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+        }
+        return shuffledArray;
+    }
 
-    let accTime = 0;
-    let spenTime = 0;
-    const draw = useCallback(() => {
+    function absPointsFromRel(pointsArray: [number, number][], canvWidth: number, canvHeight: number) {
+        const absPointsArr: [number, number][] = [];
+        for (const point of pointsArray) {
+            absPointsArr.push([canvWidth / 10 * point[0], canvHeight / 10 * point[1]]);
+        }
+        return absPointsArr;
+    }
+
+    function drawLine(progress: number, pointsArray: [number, number][]) {
+        const ctx = ctxRef.current;
         const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
+        if (ctx && canvas) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.moveTo(pointsArray[0][0], pointsArray[0][1]);
+            const currentPointAnim = Math.floor((progress) * pointsArray.length);
 
-        if (drawing.current) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);  // Pulisci il canvas
-
-            // Disegna cerchi nei punti specificati
-            for (const point of points) {
-                ctx.beginPath();
-                ctx.arc(point[0], point[1], 10, 0, 2 * Math.PI);  // Disegna un cerchio con raggio di 10
-                ctx.fillStyle = 'red';
-                ctx.fill();
-            }
-
-            // Disegna cerchio centrale se flashOn è true
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const flashElapsedTime = performance.now() - lastFlash.current;
-
-            if (flashElapsedTime >= flashFreq.current) {
-                flashOn.current = !flashOn.current;
-                lastFlash.current = flashElapsedTime;
-            }
-
-            if (flashOn.current) {
-                console.log(`acc: ${performance.now() - spenTime}`);
-                accTime = performance.now();
-                
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, 20, 0, 2 * Math.PI);
-                ctx.fillStyle = 'blue';
-                ctx.fill();
-            } else {
-                console.log(`spen: ${performance.now() - accTime}`);
-                spenTime = performance.now();
-            }
-
-            const pPos = prevPos.current;
-            const cPos = currentPos.current;
-
-            if (pPos.x !== cPos.x && pPos.y !== cPos.y) {
-                ctx.beginPath();
-                ctx.moveTo(pPos.x, pPos.y);
-                ctx.lineTo(cPos.x, cPos.y);
-                ctx.strokeStyle = 'blue';
-                ctx.lineWidth = 5;
+            if (currentPointAnim > 0) {
+                for (let i = 0; i < currentPointAnim; i++) {
+                    const point = pointsArray[i];
+                    ctx.lineTo(point[0], point[1]);
+                    ctx.moveTo(point[0], point[1]);
+                }
+                if (currentPointAnim < pointsArray.length) {
+                    const relProgr = (progress - ((1 / pointsArray.length) * currentPointAnim)) * pointsArray.length;
+                    const x = gsap.utils.interpolate(pointsArray[currentPointAnim - 1][0], pointsArray[currentPointAnim][0], relProgr);
+                    const y = gsap.utils.interpolate(pointsArray[currentPointAnim - 1][1], pointsArray[currentPointAnim][1], relProgr);
+                    ctx.lineTo(x, y);
+                } /* else {
+                    ctx.beginPath();
+                    ctx.arc(pointsArray[pointsArray.length - 1][0], pointsArray[pointsArray.length - 1][1], 20, 0, Math.PI * 2);
+                } */
                 ctx.stroke();
-                prevPos.current = cPos;
+            }
+
+            for (let i = 0; i < pointsArray.length; i++) {
+                const point = pointsArray[i];
+                ctx.beginPath();
+                ctx.arc(point[0], point[1], 20, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+    }
+
+    function winAnimation(pointsArray: [number, number][]) {
+        gsap.to(progress, {
+            current: 1,
+            duration: 10,  // Durata dell'animazione in secondi
+            onUpdate: () => drawLine(progress.current, pointsArray),  // Aggiorna il disegno in ogni frame
+        });
+    }
+
+    const toucHandler = useCallback((rect: DOMRect, canvas: HTMLCanvasElement) => (e: TouchEvent) => {
+        e.preventDefault();
+
+        touchX.current = e.touches[0].clientX - rect.left;
+        touchY.current = e.touches[0].clientY - rect.top;
+
+        const dx = touchX.current - absPointsRef.current[currentPointIndex.current][0];
+        const dy = touchY.current - absPointsRef.current[currentPointIndex.current][1];
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        frequency.current = 15 - (distance / (Math.sqrt(canvas.width * canvas.width + canvas.height * canvas.height)) * 14.9);
+
+        if (distance < 30) {
+            if (currentPointIndex.current < absPointsRef.current.length - 1) {
+                pointsToDraw.current.push(absPointsRef.current[currentPointIndex.current]);
+                currentPointIndex.current++;
+            } else if (currentPointIndex.current === absPointsRef.current.length - 1) {
+                pointsToDraw.current.push(absPointsRef.current[currentPointIndex.current]);
+                win.current = true;
+                winAnimation([[canvas.width / 2, canvas.height / 2], ...absPointsFromRel(points, rect.width, rect.height)]);
             }
         }
 
-        // fadeTrail(ctx);  // Chiamata a fadeTrail
-    }, [points, fadeTrail]);
-
-    const update = useCallback(() => {
-        draw();
-        requestAnimationFrame(update);
-    }, [draw]);
-
-    const drawTrail = (event: MouseEvent | TouchEvent) => {
-        const canvas = canvasRef.current;
-        if (!canvas || !drawing) return;
-        const { clientX, clientY } = 'touches' in event ? event.touches[0] : event;
-        const rect = canvas.getBoundingClientRect();
-        const posX = clientX - rect.left;
-        const posY = clientY - rect.top;
-
-        currentPos.current = { x: posX, y: posY };
-
-        if (currentPointIndex < points.length) {
-            const distance = calculateDistance(prevPos.current, points[currentPointIndex]);
-
-            flashFreq.current = distance * 10;
-
-            if (distance < 50) {
-                setCurrentPointIndex(prevIndex => prevIndex + 1);
-            }
-        }
-    };
-
-    const startDrawing = (event: MouseEvent | TouchEvent) => {
-        drawing.current = true;
-
-        const { clientX, clientY } = 'touches' in event ? event.touches[0] : event;
-        const rect = canvasRef.current?.getBoundingClientRect();
-        if (rect) {
-            currentPos.current = { x: clientX - rect.left, y: clientY - rect.top };
-        }
-    };
-
-    const endDrawing = () => {
-        drawing.current = false;
-    };
-
-    useEffect(() => {
-        requestAnimationFrame(update);
-    });
-
+    }, []);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         if (canvas) {
-            canvas.addEventListener('mousedown', startDrawing);
-            canvas.addEventListener('mouseup', endDrawing);
-            canvas.addEventListener('mousemove', drawTrail);
-            canvas.addEventListener('touchstart', startDrawing);
-            canvas.addEventListener('touchend', endDrawing);
-            canvas.addEventListener('touchmove', drawTrail);
+            const rect = canvas.getBoundingClientRect();
+            const randomPoints = shuffleArray(points);
+            absPointsRef.current = absPointsFromRel(randomPoints, rect.width, rect.height);
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                ctxRef.current = ctx;
+                ctx!.fillStyle = secondaryColor;
+                ctx!.lineWidth = 10;
+                ctx!.strokeStyle = secondaryColor;
+            }
+
+            canvas.addEventListener('touchmove', toucHandler(rect, canvas), false);
+
+            // winAnimation([[canvas.width / 2, canvas.height / 2], ...absPointsFromRel(points, rect.width, rect.height)]);
         }
 
-        /* const fadeInterval = setInterval(() => {
-            const canvas = canvasRef.current;
-            const ctx = canvas?.getContext('2d');
-            if (ctx) {
-                fadeTrail(ctx);
-            }
-        }, 10); */
+        requestAnimationFrame(draw);
 
         return () => {
             if (canvas) {
-                canvas.removeEventListener('mousedown', startDrawing);
-                canvas.removeEventListener('mouseup', endDrawing);
-                canvas.removeEventListener('mousemove', drawTrail);
-                canvas.removeEventListener('touchstart', startDrawing);
-                canvas.removeEventListener('touchend', endDrawing);
-                canvas.removeEventListener('touchmove', drawTrail);
+                const rect = canvas.getBoundingClientRect();
+                canvas.removeEventListener('touchmove', toucHandler(rect, canvas));
             }
-            // clearInterval(fadeInterval);
-        };
-    }, [fadeTrail]);
+        }
+    }, [canvasRef]);
 
+    function draw(now: number) {
+        if (win.current) {
+            return;
+        }
+        const ctx = ctxRef.current;
+        const canvas = canvasRef.current;
+        if (ctx && canvas) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    useEffect(() => {
-        const handleTouchMove = (event: TouchEvent) => {
-            event.preventDefault();
-        };
+            if (now - lastTime.current >= (1000 / frequency.current)) {
+                blinkState.current = !blinkState.current;
+                lastTime.current = now;
+            }
 
-        document.addEventListener('touchmove', handleTouchMove, { passive: false });
-        return () => {
-            document.removeEventListener('touchmove', handleTouchMove);
+            if (blinkState.current) {
+                ctx.fillStyle = errColor;
+                ctx.beginPath();
+                ctx.arc(canvas.width / 2, canvas.height / 2, frequency.current * 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = secondaryColor;
+            }
+
+            if (pointsToDraw.current.length > 0) {
+                const ptd = pointsToDraw.current;
+                for (let i = 0; i < ptd.length; i++) {
+                    const point = ptd[i];
+                    ctx.beginPath();
+                    ctx.arc(point[0], point[1], 20, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
         }
 
-    }, []);
+        requestAnimationFrame(draw);
+    }
 
     return <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight} />;
 };
