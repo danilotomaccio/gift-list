@@ -1,0 +1,14 @@
+.numOnBG {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    font-size: 90vh;
+    overflow: hidden;
+
+    z-index: -999;
+}
+
+.secondGame {
+    overflow: hidden;
+}

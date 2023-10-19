@@ -1,0 +1,31 @@
+.inputPin {
+    margin: 32px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.num {
+    background-color: var(--md-sys-color-surface-variant);
+    width: 50px;
+    text-align: center;
+    padding: 1rem .5rem;
+    margin: 0 8px;
+    font-size: 2rem;
+    border: 1px solid var(--md-sys-color-on-surface-variant);
+    border-radius: .5rem;
+    color: var(--md-sys-color-on-surface-variant);
+    
+    -moz-appearance: textfield;
+}
+
+.num::-webkit-inner-spin-button,
+.num::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.num:focus {
+    outline: none;
+}

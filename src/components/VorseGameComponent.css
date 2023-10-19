@@ -1,0 +1,13 @@
+.inputField {
+    width: 200px;
+    height: 150px;
+}
+
+.vorseGame {
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}

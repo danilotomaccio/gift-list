@@ -13,8 +13,11 @@
     "@lit/react": "^1.0.0",
     "@material/web": "^1.0.0",
     "axios": "^1.5.1",
+    "gsap": "^3.12.2",
+    "pixi.js": "^7.3.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.16.0"
   },
   "devDependencies": {
     "@types/node": "^20.8.4",
