@@ -93,9 +93,11 @@ export const TrailComponent: React.FC<{ points: [number, number][], onWin: () =>
             if (currentPointIndex.current < absPointsRef.current.length - 1) {
                 pointsToDraw.current.push(absPointsRef.current[currentPointIndex.current]);
                 currentPointIndex.current++;
+                navigator.vibrate([100]);
             } else if (currentPointIndex.current === absPointsRef.current.length - 1) {
                 pointsToDraw.current.push(absPointsRef.current[currentPointIndex.current]);
                 win.current = true;
+                navigator.vibrate([300]);
                 winAnimation([[canvas.width / 2, canvas.height / 2], ...absPointsFromRel(points, rect.width, rect.height)]);
                 onWin();
             }
