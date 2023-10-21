@@ -14,10 +14,10 @@ export const InputPinComponent: React.FC<{ pin: string, onWin: () => void }> = (
         nums.current.forEach((num, index) => {
             if (num) {
                 num.dataset.id = index.toString();
-                num.addEventListener('keyup', () => {
+                num.addEventListener('keydown', () => {
                     if (num.value.length === 1) {
                         nums.current[index + 1]?.focus();
-                    }
+                    } 
                 });
             }
         });
@@ -30,6 +30,7 @@ export const InputPinComponent: React.FC<{ pin: string, onWin: () => void }> = (
                 onWin();
             } else {
                 setInputValues(Array(4).fill(''));
+                nums.current[0]?.focus();
             }
         }
     });
