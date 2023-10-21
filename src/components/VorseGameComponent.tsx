@@ -52,14 +52,18 @@ export const VorseGameComponent: React.FC<{ onWin: () => void }> = ({ onWin }) =
         navigator.vibrate(pattern);
     };
 
+    const buttonStyle: React.CSSProperties & {
+        [key: string]: string;
+    } = {
+        '--_container-color': flashing ? 'var(--md-sys-color-error)' : '',
+        '--_icon-color': flashing ? 'var(--md-sys-color-on-error)' : ''
+    };
+
     return (
         <div className='vorseGame'>
             <MorseAlphabetComponent />
             <InputPinComponent pin={pwd} onWin={onWin} />
-            <MdFilledTonalIconButtonComponent onClick={vibrateMorse} style={{
-                '--_container-color': flashing ? 'var(--md-sys-color-error)' : '',
-                '--_icon-color': flashing ? 'var(--md-sys-color-on-error)' : ''
-            }}>
+            <MdFilledTonalIconButtonComponent onClick={vibrateMorse} style={buttonStyle}>
                 <MdIconComponent>vibration</MdIconComponent>
             </MdFilledTonalIconButtonComponent>
         </div>
