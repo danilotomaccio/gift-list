@@ -9,7 +9,7 @@
     margin: 18px;
 }
 
-@media (max-width: 410px) {
+@media (max-width: 415px) {
     .firstGame .textGame {
         font-size: 38px;
     }
