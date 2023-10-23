@@ -8,3 +8,9 @@
 .firstGame .textGame {
     margin: 18px;
 }
+
+@media (max-width: 410px) {
+    .firstGame .textGame {
+        font-size: 38px;
+    }
+}
