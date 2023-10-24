@@ -39,7 +39,7 @@ export const TextGameComponent: React.FC<{ onWin: () => void }> = ({ onWin }) =>
             {text.split('').map((letter, index) => (
                 <span
                     key={index}
-                    style={{ color: colors[index], textDecoration: index < 23 && index> 19 ? 'underline' : 'none', cursor: 'pointer' }}
+                    style={{ userSelect: 'none', color: colors[index], textDecoration: index < 23 && index> 19 ? 'underline' : 'none', cursor: 'pointer' }}
                     onClick={() => handleLetterClick(index)}
                 >
                     {letter}
