@@ -6,7 +6,7 @@ export const GiftPage: React.FC = () => {
     return (
         <>
             <div className="display-large winText">
-                Assa fa a Maronn!
+                Tanti auguri!
             </div>
 
             <a href="https://wa.me/+393343228283?text=Ho%20finito%2C%20mandami%20il%20link" target="_blank" rel="noopener noreferrer" className='giftComponent'>
