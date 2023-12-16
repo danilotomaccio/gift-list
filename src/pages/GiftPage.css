@@ -1,0 +1,78 @@
+.winText {
+  margin: 12px 16px;
+  text-align: center;
+  padding: 16px;
+}
+
+.giftComponent {
+  position: relative;
+  width: 80%;
+  border-radius: 16px;
+  margin: 12px;
+
+  --md-elevation-level: 2;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.text {
+  flex: 1 1 auto;
+  padding: 18px;
+
+  width: 92%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text img {
+  max-width: 50px;
+}
+
+.image {
+  display: contents;
+}
+
+.image img {
+  width: 100%;
+  border-radius: 16px;
+}
+
+a.giftComponent {
+  text-decoration: none;
+  color: inherit;
+}
+
+.btnWrapper {
+  width: 100%;
+  text-align: center;
+}
+
+.clausola {
+  margin: 12px;
+  text-align: center;
+}
+
+@media (max-width: 800px) {
+  .giftComponent {
+    width: auto;
+    border-radius: 16px;
+    margin: 16px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .giftComponent {
+    background-color: var(--md-sys-color-surface-variant);
+  }
+}

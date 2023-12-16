@@ -1,6 +1,6 @@
 import { MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
-import { GiftListPage } from './pages/GiftListPage';
+import { GiftPage } from './pages/GiftPage';
 import { FirstGamePage } from './pages/FirstGamePage';
 import { SecondGamePage } from './pages/SecondGamePage';
 import { ThirdGamePage } from './pages/ThirdGamePage';
@@ -29,7 +29,7 @@ function App() {
       <Route path="/secondGame" Component={SecondGamePage} />
       <Route path="/thirdGame" Component={ThirdGamePage} />
       <Route path="/fourthGame" Component={FourthGamePage} />
-      <Route path="/gift-list" Component={GiftListPage} />
+      <Route path="/gift-list" Component={GiftPage} />
     </Routes>
   )
 }
