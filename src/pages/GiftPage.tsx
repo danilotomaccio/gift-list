@@ -1,6 +1,5 @@
 import React from "react";
 import { MdElevationComponent } from "../wrappers/elevation-wrapper";
-import { MdElevatedcButtonComponent, MdFilledButtonComponent } from "../wrappers/button-wrapper";
 import "./GiftPage.css";
 
 export const GiftPage: React.FC = () => {
@@ -10,7 +9,7 @@ export const GiftPage: React.FC = () => {
                 Assa fa a Maronn!
             </div>
 
-            <a href="" target="_blank" rel="noopener noreferrer" className='giftComponent'>
+            <a href="https://wa.me/+393343228283?text=Ho%20finito%2C%20mandami%20il%20link" target="_blank" rel="noopener noreferrer" className='giftComponent'>
                 <MdElevationComponent></MdElevationComponent>
                 <div className="text">
                     <img src="img/a-logo.png" />
